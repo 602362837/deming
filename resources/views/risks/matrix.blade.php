@@ -199,7 +199,12 @@
                 <td class="text-left">
                     <a href="/risk/index?threshold={{ $i }}" class="no-underline">
                         <span class="badge"
-                              style="background:{{ $t['color'] }};color:#fff;padding:4px 10px;pointer-events:none">
+                              style="
+                                background:{{ $t['color'] }};
+                                color: {{ contrast_color($t['color']) }};
+                                padding:4px 10px;
+                                pointer-events:none"
+                                >
                             {{ $t['label'] }}
                         </span>
                     </a>
