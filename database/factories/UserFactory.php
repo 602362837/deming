@@ -1,29 +1,41 @@
 <?php
 
+namespace Database\Factories;
+
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Faker\Generator as Faker;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+class UserFactory extends Factory
+{
+    protected $model = User::class;
 
-$factory->define(User::class, function (Faker $faker) {
-    return [
-        'login' => $faker->unique()->login,
-        'name' => $faker->name,
-        'title' => $faker->title,
-        'role' => 1,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
-    ];
-});
+    public function definition(): array
+    {
+        return [
+            'login' => $this->faker->unique()->userName(),
+            'name' => $this->faker->name(),
+            'title' => $this->faker->jobTitle(),
+            'role' => User::ROLE_ADMIN,
+            'email' => $this->faker->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => bcrypt('password'),
+            'remember_token' => Str::random(10),
+        ];
+    }
+
+    public function apiUser(): static
+    {
+        return $this->state(['role' => User::ROLE_API]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(['role' => User::ROLE_ADMIN]);
+    }
+
+    public function auditor(): static
+    {
+        return $this->state(['role' => User::ROLE_AUDITOR]);
+    }
+}
